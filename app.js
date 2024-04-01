@@ -6,11 +6,12 @@ var logger = require('morgan');
 const mongoose = require('mongoose')
 
 var indexRouter = require('./routes/index');
+var catalogRouter = require('./routes/catalog')
 var usersRouter = require('./routes/users');
 
 var app = express();
 
-const mongoString = 'mongodb+srv://olade3:BAMIdele1@noddey.gihc6zd.mongodb.net/?retryWrites=true&w=majority&appName=noddey'
+const mongoString = 'mongodb+srv://olade3:BAMIdele1@noddey.gihc6zd.mongodb.net/nodeTraining?retryWrites=true&w=majority&appName=noddey'
 
 main()
 .then(()=> console.log('connected to db'))
@@ -31,6 +32,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/catalog',catalogRouter)
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

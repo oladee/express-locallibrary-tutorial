@@ -1,24 +1,26 @@
 const mongoose = require('mongoose')
 
-const schema = mongoose.Schema
+const Schema = mongoose.Schema
 
 
-const authorSchema = new schema({
-    firstName : {type : String, required : true, maxLength : 100},
-    familyName : {type : String, required : true, maxLength : 100},
+const AuthorSchema = new Schema({
+    first_name : {type : String, required : true, maxLength : 100},
+    family_name : {type : String, required : true, maxLength : 100},
     dateOfBirth : {type : Date, default : Date.now()},
     dateOfDeath : {type : Date}
 })
 
-authorSchema.virtual('name').get(function (){
+AuthorSchema.virtual('name').get(function (){
     let fullname =  ''
 
-    if(this.firstName &&  this.familyName){
-        fullname = `${this.firstName}, ${this.familyName}`
+    if(this.first_name &&  this.family_name){
+        fullname = `${this.first_name}, ${this.family_name}`
     }
     return fullname
 })
 
-authorSchema.virtual('url').get(function (){
+AuthorSchema.virtual('url').get(function (){
     return `/catalog/author/${this._id}`
 })
+
+module.exports = mongoose.model('author', AuthorSchema)
