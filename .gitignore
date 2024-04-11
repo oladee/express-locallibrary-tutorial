@@ -1,2 +1,4 @@
 # ignore all files in the node modules folder
 node_modules/
+
+.env
