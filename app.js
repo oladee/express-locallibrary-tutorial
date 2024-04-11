@@ -4,6 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose')
+const compression = require("compression");
+// Set up rate limiter: maximum of twenty requests per minute
+const RateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 
 var indexRouter = require('./routes/index');
 var catalogRouter = require('./routes/catalog')
@@ -11,7 +15,24 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-const mongoString = 'mongodb+srv://olade3:BAMIdele1@noddey.gihc6zd.mongodb.net/nodeTraining?retryWrites=true&w=majority&appName=noddey'
+app.use(compression());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      "script-src": ["'self'", "code.jquery.com", "cdn.jsdelivr.net"],
+    },
+  }),
+);
+
+
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 20,
+});
+// Apply rate limiter to all requests
+app.use(limiter)
+
+const mongoString = process.env.MONGODB_URI
 
 main()
 .then(()=> console.log('connected to db'))
